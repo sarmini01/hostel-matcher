@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoomieMatch — Hostel Roommate Finder</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ================================================
+     PAGE 1: SPLASH / LANDING
+================================================ -->
+<div id="page-splash" class="page active">
+  <div class="splash-bg">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="splash-content">
+    <div class="logo-wrap">
+      <svg class="logo-svg" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="56" height="56" rx="14" fill="#A855F7"/>
+        <path d="M28 11L9 26v19h13V33h12v12h13V26L28 11z" fill="white"/>
+      </svg>
+    </div>
+    <h1 class="brand">RoomieMatch</h1>
+    <p class="tagline">Find your perfect hostel roommate based on habits, interests and lifestyle preferences.</p>
+    <div class="splash-actions">
+      <button class="btn btn-primary btn-lg" onclick="showPage('page-register')">Get Started</button>
+      <button class="btn btn-ghost btn-lg" onclick="showPage('page-login')">Sign In</button>
+    </div>
+    <div class="splash-badges">
+      <span class="badge-chip">Smart Matching Algorithm</span>
+      <span class="badge-chip">Secure JWT Auth</span>
+      <span class="badge-chip">MongoDB Backed</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     PAGE 2: LOGIN
+================================================ -->
+<div id="page-login" class="page">
+  <div class="auth-layout">
+    <div class="auth-deco">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="deco-text">
+        <svg class="deco-svg" viewBox="0 0 56 56" fill="none">
+          <path d="M28 11L9 26v19h13V33h12v12h13V26L28 11z" fill="white" opacity="0.9"/>
+        </svg>
+        <h2>Welcome back!</h2>
+        <p>Your perfect roommate is waiting.</p>
+      </div>
+    </div>
+    <div class="auth-form-wrap">
+      <div class="auth-card">
+        <div class="auth-card-header">
+          <h2>Sign In</h2>
+          <p>New here? <a href="#" onclick="showPage('page-register')">Create an account</a></p>
+        </div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="loginPassword" placeholder="Enter your password" required />
+              <button type="button" class="eye-btn" onclick="togglePass('loginPassword', this)">Show</button>
+            </div>
+          </div>
+          <div id="loginError" class="alert alert-error hidden"></div>
+          <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-loader hidden">Loading...</span>
+          </button>
+        </form>
+        <div class="demo-hint">
+          <strong>Demo Account:</strong> arjun@demo.com / demo1234
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     PAGE 3: REGISTER (3-step form)
+================================================ -->
+<div id="page-register" class="page">
+  <div class="auth-layout reverse">
+    <div class="auth-deco">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="deco-text">
+        <svg class="deco-svg" viewBox="0 0 56 56" fill="none">
+          <path d="M28 11L9 26v19h13V33h12v12h13V26L28 11z" fill="white" opacity="0.9"/>
+        </svg>
+        <h2>Join RoomieMatch</h2>
+        <p>Tell us about yourself and we will find your best match.</p>
+      </div>
+    </div>
+    <div class="auth-form-wrap">
+      <div class="auth-card wide">
+        <div class="auth-card-header">
+          <h2>Create Account</h2>
+          <p>Already have one? <a href="#" onclick="showPage('page-login')">Sign in</a></p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+          <div class="step-dot active" id="sdot1">1</div>
+          <div class="step-line"></div>
+          <div class="step-dot" id="sdot2">2</div>
+          <div class="step-line"></div>
+          <div class="step-dot" id="sdot3">3</div>
+        </div>
+        <div class="step-labels">
+          <span>Account</span>
+          <span>Habits</span>
+          <span>Interests</span>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+
+          <!-- STEP 1: Account Info -->
+          <div class="reg-step active" id="step1">
+            <h3 class="step-title">Account Details</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="rName" placeholder="e.g. Arjun Sharma" required />
+              </div>
+              <div class="form-group">
+                <label>Age *</label>
+                <input type="number" id="rAge" placeholder="e.g. 20" min="14" max="80" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="rEmail" placeholder="you@example.com" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Password *</label>
+                <input type="password" id="rPassword" placeholder="Minimum 6 characters" required />
+              </div>
+              <div class="form-group">
+                <label>Gender *</label>
+                <select id="rGender" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Department</label>
+                <input type="text" id="rDept" placeholder="e.g. CSE, ECE, MECH" />
+              </div>
+              <div class="form-group">
+                <label>Year of Study</label>
+                <select id="rYear">
+                  <option value="">Select year</option>
+                  <option value="1st">1st Year</option>
+                  <option value="2nd">2nd Year</option>
+                  <option value="3rd">3rd Year</option>
+                  <option value="4th">4th Year</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-full" onclick="nextStep(2)">Next: Hostel Habits</button>
+          </div>
+
+          <!-- STEP 2: Hostel Habits -->
+          <div class="reg-step" id="step2">
+            <h3 class="step-title">Hostel Habits</h3>
+
+            <div class="form-group">
+              <label>Sleep Schedule *</label>
+              <p class="field-hint">When do you usually go to sleep?</p>
+              <div class="toggle-group" id="tgSleep">
+                <button type="button" class="toggle-btn" data-val="Early" onclick="selectToggle('tgSleep',this,'rSleep')">Early Bird (before 11 PM)</button>
+                <button type="button" class="toggle-btn" data-val="Late"  onclick="selectToggle('tgSleep',this,'rSleep')">Night Owl (after 11 PM)</button>
+              </div>
+              <input type="hidden" id="rSleep" />
+            </div>
+
+            <div class="form-group">
+              <label>Preferred Study Time *</label>
+              <div class="toggle-group" id="tgStudy">
+                <button type="button" class="toggle-btn" data-val="Morning"   onclick="selectToggle('tgStudy',this,'rStudy')">Morning</button>
+                <button type="button" class="toggle-btn" data-val="Afternoon" onclick="selectToggle('tgStudy',this,'rStudy')">Afternoon</button>
+                <button type="button" class="toggle-btn" data-val="Night"     onclick="selectToggle('tgStudy',this,'rStudy')">Night</button>
+              </div>
+              <input type="hidden" id="rStudy" />
+            </div>
+
+            <div class="form-group">
+              <label>Cleanliness Level *</label>
+              <p class="field-hint">How clean do you keep your space?</p>
+              <div class="toggle-group" id="tgClean">
+                <button type="button" class="toggle-btn" data-val="Low"    onclick="selectToggle('tgClean',this,'rClean')">Relaxed</button>
+                <button type="button" class="toggle-btn" data-val="Medium" onclick="selectToggle('tgClean',this,'rClean')">Moderate</button>
+                <button type="button" class="toggle-btn" data-val="High"   onclick="selectToggle('tgClean',this,'rClean')">Very Clean</button>
+              </div>
+              <input type="hidden" id="rClean" />
+            </div>
+
+            <div class="form-group">
+              <label>Noise Tolerance *</label>
+              <p class="field-hint">How much noise can you handle in your room?</p>
+              <div class="toggle-group" id="tgNoise">
+                <button type="button" class="toggle-btn" data-val="Low"    onclick="selectToggle('tgNoise',this,'rNoise')">Quiet Only</button>
+                <button type="button" class="toggle-btn" data-val="Medium" onclick="selectToggle('tgNoise',this,'rNoise')">Moderate Noise</button>
+                <button type="button" class="toggle-btn" data-val="High"   onclick="selectToggle('tgNoise',this,'rNoise')">Noise is Fine</button>
+              </div>
+              <input type="hidden" id="rNoise" />
+            </div>
+
+            <div class="form-group">
+              <label>Short Bio (optional)</label>
+              <textarea id="rBio" placeholder="Tell future roommates a bit about yourself..." rows="3" maxlength="300" oninput="updateCharCount()"></textarea>
+              <span class="char-count"><span id="bioCharCount">0</span> / 300 characters</span>
+            </div>
+
+            <div class="form-row step-nav">
+              <button type="button" class="btn btn-ghost" onclick="nextStep(1)">Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next: Select Interests</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Interests -->
+          <div class="reg-step" id="step3">
+            <h3 class="step-title">Your Interests</h3>
+            <p class="hint">Select all that apply. At least 1 is required.</p>
+            <div class="interests-grid" id="interestsGrid">
+              <!-- Built dynamically by app.js -->
+            </div>
+            <div id="registerError" class="alert alert-error hidden"></div>
+            <div class="form-row step-nav">
+              <button type="button" class="btn btn-ghost" onclick="nextStep(2)">Back</button>
+              <button type="submit" class="btn btn-primary" id="registerBtn">
+                <span class="btn-text">Create Account</span>
+                <span class="btn-loader hidden">Saving...</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     PAGE 4: DASHBOARD
+================================================ -->
+<div id="page-dashboard" class="page">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <svg width="26" height="26" viewBox="0 0 56 56" fill="none">
+        <rect width="56" height="56" rx="12" fill="#A855F7"/>
+        <path d="M28 11L9 26v19h13V33h12v12h13V26L28 11z" fill="white"/>
+      </svg>
+      <span>RoomieMatch</span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-primary btn-sm" onclick="findMatches()">Find Matches</button>
+      <div class="nav-avatar" id="navAvatar" onclick="toggleDropdown()">
+        <span id="navAvatarInitial">?</span>
+      </div>
+      <div class="nav-dropdown hidden" id="navDropdown">
+        <button onclick="showEditProfile()">Edit Profile</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar: Profile Card -->
+    <aside class="profile-sidebar">
+      <div class="profile-card">
+        <div class="profile-avatar-big" id="dashAvatarBig">
+          <span id="dashAvatarInitial">?</span>
+        </div>
+        <h2 id="dashName">Loading...</h2>
+        <p class="profile-dept" id="dashDept"></p>
+        <p class="profile-bio" id="dashBio"></p>
+        <div class="profile-stats">
+          <div class="stat"><span id="statAge">—</span><small>Age</small></div>
+          <div class="stat"><span id="statGender">—</span><small>Gender</small></div>
+          <div class="stat"><span id="statConnections">0</span><small>Connected</small></div>
+        </div>
+        <div class="profile-tags" id="profileTags"></div>
+      </div>
+
+      <div class="habit-card">
+        <h4>My Habits</h4>
+        <div class="habit-row"><span class="habit-label">Sleep</span><span class="habit-val" id="hSleep">—</span></div>
+        <div class="habit-row"><span class="habit-label">Cleanliness</span><span class="habit-val" id="hClean">—</span></div>
+        <div class="habit-row"><span class="habit-label">Noise</span><span class="habit-val" id="hNoise">—</span></div>
+        <div class="habit-row"><span class="habit-label">Study Time</span><span class="habit-val" id="hStudy">—</span></div>
+      </div>
+
+      <div class="db-status-card" id="dbStatusCard">
+        <div class="db-dot" id="dbDot"></div>
+        <span id="dbStatusText">Checking connection...</span>
+      </div>
+    </aside>
+
+    <!-- Main: Users Grid -->
+    <main class="dashboard-main">
+      <div class="dashboard-hero">
+        <div>
+          <h1 id="heroGreet">Welcome!</h1>
+          <p>Find and connect with your ideal hostel roommate.</p>
+        </div>
+        <button class="btn find-btn" onclick="findMatches()">Find My Matches</button>
+      </div>
+
+      <section class="section">
+        <div class="section-header">
+          <h2>All Hostel Members</h2>
+          <span class="badge" id="userCount">Loading...</span>
+        </div>
+        <div class="users-grid" id="usersGrid">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ================================================
+     EDIT PROFILE MODAL
+================================================ -->
+<div id="editModal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Profile</h3>
+      <button class="modal-close" onclick="hideEditProfile()">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="eName" />
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="eAge" min="14" max="80" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Department</label>
+          <input type="text" id="eDept" />
+        </div>
+        <div class="form-group">
+          <label>Year of Study</label>
+          <select id="eYear">
+            <option value="">Select</option>
+            <option value="1st">1st Year</option>
+            <option value="2nd">2nd Year</option>
+            <option value="3rd">3rd Year</option>
+            <option value="4th">4th Year</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Sleep Schedule</label>
+        <div class="toggle-group" id="etgSleep">
+          <button type="button" class="toggle-btn" data-val="Early" onclick="selectToggle('etgSleep',this,'eSleep')">Early Bird</button>
+          <button type="button" class="toggle-btn" data-val="Late"  onclick="selectToggle('etgSleep',this,'eSleep')">Night Owl</button>
+        </div>
+        <input type="hidden" id="eSleep" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cleanliness Level</label>
+          <div class="toggle-group" id="etgClean">
+            <button type="button" class="toggle-btn" data-val="Low"    onclick="selectToggle('etgClean',this,'eClean')">Relaxed</button>
+            <button type="button" class="toggle-btn" data-val="Medium" onclick="selectToggle('etgClean',this,'eClean')">Moderate</button>
+            <button type="button" class="toggle-btn" data-val="High"   onclick="selectToggle('etgClean',this,'eClean')">Very Clean</button>
+          </div>
+          <input type="hidden" id="eClean" />
+        </div>
+        <div class="form-group">
+          <label>Noise Tolerance</label>
+          <div class="toggle-group" id="etgNoise">
+            <button type="button" class="toggle-btn" data-val="Low"    onclick="selectToggle('etgNoise',this,'eNoise')">Quiet Only</button>
+            <button type="button" class="toggle-btn" data-val="Medium" onclick="selectToggle('etgNoise',this,'eNoise')">Moderate</button>
+            <button type="button" class="toggle-btn" data-val="High"   onclick="selectToggle('etgNoise',this,'eNoise')">Noise is Fine</button>
+          </div>
+          <input type="hidden" id="eNoise" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Preferred Study Time</label>
+        <div class="toggle-group" id="etgStudy">
+          <button type="button" class="toggle-btn" data-val="Morning"   onclick="selectToggle('etgStudy',this,'eStudy')">Morning</button>
+          <button type="button" class="toggle-btn" data-val="Afternoon" onclick="selectToggle('etgStudy',this,'eStudy')">Afternoon</button>
+          <button type="button" class="toggle-btn" data-val="Night"     onclick="selectToggle('etgStudy',this,'eStudy')">Night</button>
+        </div>
+        <input type="hidden" id="eStudy" />
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="eBio" rows="2" maxlength="300"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Interests</label>
+        <div class="interests-grid small" id="editInterestsGrid"></div>
+      </div>
+      <div id="editError" class="alert alert-error hidden"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="hideEditProfile()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     PAGE 5: MATCH RESULTS
+================================================ -->
+<div id="page-matches" class="page">
+  <nav class="navbar">
+    <button class="btn btn-ghost btn-sm" onclick="showPage('page-dashboard')">Back to Dashboard</button>
+    <div class="nav-brand">
+      <svg width="26" height="26" viewBox="0 0 56 56" fill="none">
+        <rect width="56" height="56" rx="12" fill="#A855F7"/>
+        <path d="M28 11L9 26v19h13V33h12v12h13V26L28 11z" fill="white"/>
+      </svg>
+      <span>RoomieMatch</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="matches-layout">
+    <div class="matches-header">
+      <h1>Your Best Matches</h1>
+      <p>Ranked by compatibility score based on your habits, preferences and shared interests.</p>
+    </div>
+
+    <div class="filters-bar">
+      <div class="filter-group">
+        <label>Filter by Department</label>
+        <select id="filterDept" onchange="applyFilters()">
+          <option value="all">All Departments</option>
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="MECH">MECH</option>
+          <option value="CIVIL">CIVIL</option>
+          <option value="MBA">MBA</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Filter by Year</label>
+        <select id="filterYear" onchange="applyFilters()">
+          <option value="all">All Years</option>
+          <option value="1st">1st Year</option>
+          <option value="2nd">2nd Year</option>
+          <option value="3rd">3rd Year</option>
+          <option value="4th">4th Year</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Filter by Gender</label>
+        <select id="filterGender" onchange="applyFilters()">
+          <option value="all">Any Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="matchesGrid" class="matches-grid"></div>
+
+    <div id="noMatches" class="no-matches hidden">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#C8A2FF" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <p>No matches found with the selected filters.<br/>Try removing some filters.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
