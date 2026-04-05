@@ -7,7 +7,7 @@
 // The Express server serves this frontend at http://localhost:5000
 // so both the page and the API are on the same origin.
 // Do NOT change this unless you deploy to a different host.
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "const API_BASE = "https://hostel-matcher.onrender.com/api";";
 
 // ── App State ─────────────────────────────────────────────
 let currentUser = null;
